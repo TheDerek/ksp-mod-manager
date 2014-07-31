@@ -4,6 +4,7 @@ from PyQt4 import QtGui
 from PyQt4 import QtCore
 from PyQt4.QtCore import QUrl, SIGNAL
 from PyQt4.QtWebKit import QWebView, QWebPage
+from file_deploy_util import download_file, install_from_url
 
 
 WEBSITE_ADDRESS = "http://beta.kerbalstuff.com"
@@ -26,12 +27,8 @@ class BrowseMods(QtGui.QVBoxLayout):
             downloadUrl = WEBSITE_ADDRESS + str(url.encodedPath())
             print("Download detected")
             print("Download URL: " + downloadUrl)
-            download_file(downloadUrl, "raw_mods/mod.zip")
+            install_from_url(downloadUrl, "GameData")
+            #download_file(downloadUrl, "raw_mods/mod.zip")
 
 
-def download_file(url, file_name=None):
-    #url = "http://download.thinkbroadband.com/10MB.zip"
-    if file_name is None:
-        file_name = url.split('/')[-1] + ".zip"
 
-    urllib.urlretrieve(url, file_name)
