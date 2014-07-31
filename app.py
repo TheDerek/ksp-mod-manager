@@ -15,7 +15,7 @@ def main():
     tab3 = QtGui.QWidget()
 
     #Resize width and height
-    tabs.resize(640, 480)
+    tabs.resize(1000, 700)
 
     #Move QTabWidget to x:300,y:300
     tabs.move(QtGui.QApplication.desktop().screen().rect().center() - tabs.rect().center())
