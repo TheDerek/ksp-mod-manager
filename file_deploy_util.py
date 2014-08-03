@@ -3,8 +3,10 @@ import fnmatch
 import os
 import shutil
 import urllib
+import urllib2
 import zipfile
 import stat
+import math
 
 
 TEMP_DICT = "temp"
@@ -12,18 +14,32 @@ UNZIPPED_TEMP = "temp/unzipped"
 
 
 def install_from_url(url, install_location):
+    if not os.path.isdir(install_location):
+        raise DictError("Specified path is not a valid directory")
+
+    if not os.access(install_location, os.W_OK):
+        raise DictError("User not allowed to write to specified directory")
+
     shutil.rmtree(UNZIPPED_TEMP)
     shutil.rmtree(TEMP_DICT)
 
     os.mkdir(TEMP_DICT)
     os.mkdir(UNZIPPED_TEMP)
 
-    file_name = TEMP_DICT + "/mod.zip"
-    download_file(url, file_name)
+    #file_name = TEMP_DICT + "/mod.zip"
+    file_name = download_file(url)
     unzip(file_name, UNZIPPED_TEMP)
-
+    delete_super_folders(UNZIPPED_TEMP, "GameData")
     copytree(UNZIPPED_TEMP, install_location)
     os.remove(file_name)
+
+
+class DictError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
 
 
 def delete_super_folders(dict, super_folder_name):
@@ -34,6 +50,8 @@ def delete_super_folders(dict, super_folder_name):
 
     if len(matches) is 0:
         return
+
+    print("Super folder detected, deleting.")
 
     #Get first GameData Folder
     super_folder = matches[0]
@@ -67,12 +85,44 @@ def copytree(src, dst, symlinks = False, ignore = None):
         else:
             shutil.copy2(s, d)
 
-def download_file(url, file_name=None):
-    #url = "http://download.thinkbroadband.com/10MB.zip"
-    if file_name is None:
-        file_name = url.split('/')[-1]
 
-    urllib.urlretrieve(url, file_name)
+def download_file(url):
+    """Helper to download large files
+        the only arg is a url
+       this file will go to a temp directory
+       the file will also be downloaded
+       in chunks and print out how much remains
+    """
+
+    baseFile = os.path.basename(url)
+
+    #move the file to a more uniq path
+    os.umask(0002)
+    temp_path = "/tmp/"
+    try:
+        file = os.path.join(temp_path, baseFile)
+        #file = file_name
+
+        req = urllib2.urlopen(url)
+        total_size = int(req.info().getheader('Content-Length').strip())
+        downloaded = 0
+        CHUNK = 256 * 10240
+        with open(file, 'wb') as fp:
+            while True:
+                chunk = req.read(CHUNK)
+                downloaded += len(chunk)
+                print math.floor( (downloaded / total_size) * 100)
+                if not chunk: break
+                fp.write(chunk)
+    except urllib2.HTTPError, e:
+        print "HTTP Error:", e.code, url
+        return False
+    except urllib2.URLError, e:
+        print "URL Error:", e.reason, url
+        return False
+
+    return file
+
 
 
 def unzip(source_filename, dest_dir):

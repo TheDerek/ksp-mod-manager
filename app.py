@@ -1,13 +1,31 @@
 from PyQt4 import QtGui
 from PyQt4 import QtCore
 import sys
-from PyQt4.QtCore import QUrl
+from PyQt4.QtCore import QUrl, QSettings, QString
+from PyQt4.QtGui import QBoxLayout, QWidget, QVBoxLayout, QLabel, QTextEdit, QLineEdit, QPushButton
 from PyQt4.QtWebKit import QWebView
 from browse_mods import BrowseMods
+from url_install import URLInstall
 
 
 def main():
     app = QtGui.QApplication(sys.argv)
+
+    window = QWidget()
+    layout = QVBoxLayout(window)
+
+    gamedata_label = QLabel()
+    gamedata_label.setText("GameData Location:")
+    layout.addWidget(gamedata_label)
+
+    settings = QSettings("AppSettings", "Strings")
+    loc = settings.value("GameDataLocation", type=QString)
+
+    gamedata_edit = QLineEdit()
+    if loc is not None:
+        gamedata_edit.setText(loc)
+    layout.addWidget(gamedata_edit)
+
     tabs = QtGui.QTabWidget()
 
     tab1 = QtGui.QWidget()
@@ -21,17 +39,30 @@ def main():
     tabs.move(QtGui.QApplication.desktop().screen().rect().center() - tabs.rect().center())
 
     #Set Layout for Tabs
-    tab1.setLayout(BrowseMods())
+    tab1.setLayout(BrowseMods(gamedata_edit))
+    tab2.setLayout(URLInstall())
 
-    tabs.addTab(tab1, "Browse Mods")
-    tabs.addTab(tab2, "Installed Mods")
+    tabs.addTab(tab1, "Install From Kerbal Stuff")
+    tabs.addTab(tab2, "Install From URL")
     tabs.addTab(tab3, "Manage Instances")
 
-    tabs.setWindowTitle("Kerbal Mod Launcher")
-    tabs.show()
+    layout.addWidget(tabs)
 
-    sys.exit(app.exec_())
+    window.setWindowTitle("Kerbal Mod Launcher")
+    window.show()
+    #tabs.setWindowTitle("Kerbal Mod Launcher")
+    #tabs.show()
+
+    close = app.exec_()
+
+    print("Saving settings")
+    settings.setValue("GameDataLocation", gamedata_edit.text())
+    del settings
+
+    sys.exit(close)
+    #sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
     main()
+
