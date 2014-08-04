@@ -1,12 +1,8 @@
-import httplib
-import urllib
-import urllib2
 from PyQt4 import QtGui
-from PyQt4 import QtCore
-from PyQt4.QtCore import QUrl, SIGNAL
-from PyQt4.QtGui import QLineEdit, QLabel, QPushButton, QTextEdit, QMessageBox
-from PyQt4.QtWebKit import QWebView, QWebPage
-from file_deploy_util import download_file, install_from_url, DictError
+
+from PyQt4.QtGui import QLabel, QPushButton, QTextEdit, QMessageBox
+
+from src.file_deploy_util import install_from_url, DictError
 
 
 WEBSITE_ADDRESS = "http://beta.kerbalstuff.com"

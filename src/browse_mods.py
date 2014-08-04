@@ -1,11 +1,10 @@
-import urllib
-import urllib2
 from PyQt4 import QtGui
-from PyQt4 import QtCore
+
 from PyQt4.QtCore import QUrl, SIGNAL
-from PyQt4.QtGui import QLineEdit, QLabel, QMessageBox
+from PyQt4.QtGui import QMessageBox
 from PyQt4.QtWebKit import QWebView, QWebPage
-from file_deploy_util import download_file, install_from_url, DictError
+
+from src.file_deploy_util import install_from_url, DictError
 
 
 WEBSITE_ADDRESS = "http://beta.kerbalstuff.com"
@@ -31,7 +30,7 @@ class BrowseMods(QtGui.QVBoxLayout):
                 install_from_url(downloadUrl, str(self.gamedata_edit.text()))
             except DictError as e:
                 print(e.value)
-                QMessageBox(QMessageBox.Information, "Error", e.value, QMessageBox.Yes).exec_()
+                QMessageBox(QMessageBox.Information, "Error", e.value, QMessageBox.Ok).exec_()
             #download_file(downloadUrl, "raw_mods/mod.zip")
 
 

@@ -7,6 +7,7 @@ import urllib2
 import zipfile
 import stat
 import math
+from src.download import Downloader
 
 
 TEMP_DICT = "temp"
@@ -27,7 +28,15 @@ def install_from_url(url, install_location):
     os.mkdir(UNZIPPED_TEMP)
 
     #file_name = TEMP_DICT + "/mod.zip"
-    file_name = download_file(url)
+    #file_name = download_file(url)
+    #file_name = Downloader(url, "")
+
+    downloader = Downloader(url, TEMP_DICT)
+    downloader.show()
+    downloader.exec_()
+
+    file_name = downloader.file_name
+
     unzip(file_name, UNZIPPED_TEMP)
     delete_super_folders(UNZIPPED_TEMP, "GameData")
     copytree(UNZIPPED_TEMP, install_location)
@@ -124,9 +133,8 @@ def download_file(url):
     return file
 
 
-
 def unzip(source_filename, dest_dir):
-    with zipfile.ZipFile(source_filename) as zf:
+    with zipfile.ZipFile(str(source_filename)) as zf:
         for member in zf.infolist():
             # Path traversal defense copied from
             # http://hg.python.org/cpython/file/tip/Lib/http/server.py#l789

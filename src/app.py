@@ -1,11 +1,11 @@
 from PyQt4 import QtGui
-from PyQt4 import QtCore
 import sys
-from PyQt4.QtCore import QUrl, QSettings, QString
-from PyQt4.QtGui import QBoxLayout, QWidget, QVBoxLayout, QLabel, QTextEdit, QLineEdit, QPushButton
-from PyQt4.QtWebKit import QWebView
+
+from PyQt4.QtCore import QSettings, QString
+from PyQt4.QtGui import QWidget, QVBoxLayout, QLabel, QLineEdit
+
 from browse_mods import BrowseMods
-from url_install import URLInstall
+from src.url_install import URLInstall
 
 
 def main():
@@ -40,7 +40,7 @@ def main():
 
     #Set Layout for Tabs
     tab1.setLayout(BrowseMods(gamedata_edit))
-    tab2.setLayout(URLInstall())
+    tab2.setLayout(URLInstall(gamedata_edit))
 
     tabs.addTab(tab1, "Install From Kerbal Stuff")
     tabs.addTab(tab2, "Install From URL")
