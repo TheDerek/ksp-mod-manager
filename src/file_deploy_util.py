@@ -21,8 +21,11 @@ def install_from_url(url, install_location):
     if not os.access(install_location, os.W_OK):
         raise DictError("User not allowed to write to specified directory")
 
-    shutil.rmtree(UNZIPPED_TEMP)
-    shutil.rmtree(TEMP_DICT)
+    if os.path.isdir(UNZIPPED_TEMP):
+        shutil.rmtree(UNZIPPED_TEMP)
+
+    if os.path.isdir(TEMP_DICT):
+        shutil.rmtree(TEMP_DICT)
 
     os.mkdir(TEMP_DICT)
     os.mkdir(UNZIPPED_TEMP)
