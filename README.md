@@ -1,3 +1,6 @@
+Kerbal Space Program Mod Manager
+================================
+
 A desktop mod manager for Kerbal Space Program. Uses kerbalstuff to obtain mods.
 
 ![](http://i.imgur.com/90BbiyJ.png)
