@@ -46,8 +46,8 @@ def install_from_url(url, install_location):
             if f == "GameData":
                 up_one = True
                 tree = path + "/" + f
-                #print("GameData Detected, copying to GameData folder and deleting: " + tree)
-                #copy_and_delete_tree(tree, install_location)
+                print("GameData Detected, copying to GameData folder and deleting: " + tree)
+                copy_and_delete_tree(tree, install_location)
 
     if up_one:
         print("Upped one\n")
