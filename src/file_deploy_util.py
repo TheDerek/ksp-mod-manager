@@ -35,12 +35,29 @@ def install_from_url(url, install_location):
     downloader.show()
     downloader.exec_()
 
-    file_name = downloader.file_name
+    file_name = str(downloader.file_name)
 
-    unzip(file_name, UNZIPPED_TEMP)
-    delete_super_folders(UNZIPPED_TEMP, "GameData")
-    copytree(UNZIPPED_TEMP, install_location)
+    unzip2(file_name, UNZIPPED_TEMP)
+    up_one = False
+
+    for path, dirs, files in os.walk(UNZIPPED_TEMP):
+        for f in reversed(dirs):
+            print("In folder: " + f)
+            if f == "GameData":
+                up_one = True
+                tree = path + "/" + f
+                #print("GameData Detected, copying to GameData folder and deleting: " + tree)
+                #copy_and_delete_tree(tree, install_location)
+
+    if up_one:
+        print("Upped one\n")
+        copytree(UNZIPPED_TEMP, install_location + "/..")
+    else:
+        copytree(UNZIPPED_TEMP, install_location)
+
     os.remove(file_name)
+
+    print("Finished\n")
 
 
 class DictError(Exception):
@@ -66,6 +83,11 @@ def delete_super_folders(dict, super_folder_name):
     super_folder = matches[0]
     shutil.copytree(super_folder, dict)
     shutil.rmtree(super_folder)
+
+
+def copy_and_delete_tree(src, dst, symlinks = False, ignore = None):
+    copytree(src, dst, symlinks, ignore)
+    shutil.rmtree(src)
 
 
 def copytree(src, dst, symlinks = False, ignore = None):
@@ -146,3 +168,8 @@ def unzip(source_filename, dest_dir):
                 if word in (os.curdir, os.pardir, ''): continue
                 path = os.path.join(path, word)
             zf.extract(member, path)
+
+
+def unzip2(source_filename, dest_dir):
+    with zipfile.ZipFile(source_filename) as zf:
+        zf.extractall(dest_dir)
