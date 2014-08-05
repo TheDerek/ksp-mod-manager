@@ -7,7 +7,7 @@ import urllib2
 import zipfile
 import stat
 import math
-from src.download import Downloader
+from download import Downloader
 
 
 TEMP_DICT = "temp"

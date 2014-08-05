@@ -4,7 +4,7 @@ from PyQt4.QtCore import QUrl, SIGNAL
 from PyQt4.QtGui import QMessageBox
 from PyQt4.QtWebKit import QWebView, QWebPage
 
-from src.file_deploy_util import install_from_url, DictError
+from file_deploy_util import install_from_url, DictError
 
 
 WEBSITE_ADDRESS = "http://beta.kerbalstuff.com"

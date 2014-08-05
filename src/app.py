@@ -5,7 +5,7 @@ from PyQt4.QtCore import QSettings, QString
 from PyQt4.QtGui import QWidget, QVBoxLayout, QLabel, QLineEdit
 
 from browse_mods import BrowseMods
-from src.url_install import URLInstall
+from url_install import URLInstall
 
 
 def main():

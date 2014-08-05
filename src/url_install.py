@@ -2,7 +2,7 @@ from PyQt4 import QtGui
 
 from PyQt4.QtGui import QLabel, QPushButton, QTextEdit, QMessageBox
 
-from src.file_deploy_util import install_from_url, DictError
+from file_deploy_util import install_from_url, DictError
 
 
 WEBSITE_ADDRESS = "http://beta.kerbalstuff.com"
